@@ -1,4 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Gifty
+
+Gifty is a modern web application for managing gift ideas and tracking gifts for your loved ones. Built with Next.js, Firebase, and TypeScript, it provides a seamless and user-friendly experience for organizing your gift-giving.
+
+## Features
+
+- **User Authentication**: Secure user authentication system powered by Firebase Auth
+- **Gift Management**:
+  - Add new gift ideas with titles, descriptions, price estimates, and optional URLs
+  - Mark gifts as purchased
+  - Archive/unarchive gifts to keep your list organized
+  - View gift history and status
+  - Toggle between active and archived gifts
+- **Responsive Design**: Modern, mobile-friendly interface with dark mode
+
+## Technology Stack
+
+- **Frontend**:
+  - Next.js 13+ with App Router
+  - React with TypeScript
+  - Tailwind CSS for styling
+  - Client and Server Components architecture
+
+- **Backend**:
+  - Firebase Authentication
+  - Firebase Firestore for data storage
+  - Server-side and client-side data fetching
+
+## Project Structure
+
+```
+src/
+├── app/                 # Next.js 13 App Router pages
+├── components/         
+│   ├── forms/          # Form components (GiftForm, LoginForm)
+│   └── ui/             # Reusable UI components
+├── context/            # React Context providers
+├── hooks/              # Custom React hooks
+├── lib/               
+│   └── firebase/      # Firebase configuration and setup
+├── services/          # Business logic and API services
+└── types/             # TypeScript type definitions
+```
+
+## Core Components
+
+### Forms
+- **GiftForm**: Handles creation of new gift ideas with validation
+- **LoginForm**: Manages user authentication flow
+
+### UI Components
+- **GiftList**: Displays and manages gift items with filtering
+- **Button**: Reusable button component with variants
+- **NavBar**: Application navigation and user controls
+
+### Services
+- **giftService**: Handles all gift-related operations (CRUD)
+- **textParsingService**: Utility service for text processing
+
+## Authentication and Security
+
+The application implements a secure authentication flow using Firebase Authentication:
+- Protected routes require user authentication
+- Automatic redirection to login for unauthenticated users
+- Secure data access with user-specific content
+
+## Data Model
+
+### Gift Idea
+```typescript
+interface GiftIdea {
+  id: string;
+  title: string;
+  description: string;
+  priceEstimate?: number;
+  url?: string;
+  isPurchased: boolean;
+  isArchived: boolean;
+  recipientId: string;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+}
+```
+
+## State Management
+
+The application uses React's Context API for global state management:
+- **AuthContext**: Manages user authentication state
+- Local state for component-specific data
+- Real-time updates for gift status changes
+
+## Testing
+
+The project includes unit tests for components and services:
+- Jest for unit testing
+- React Testing Library for component tests
+- Test coverage for critical business logic
+
+## Contributing
+
+1. Fork the repository
+2. Create a new branch
+3. Make your changes
+4. Submit a pull request
+
+## License
+
+MIT License - See LICENSE file for details
 
 ## Getting Started
 
