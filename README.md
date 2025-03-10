@@ -141,3 +141,49 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Deployment
+This application is deployed using Vercel, which provides an optimal deployment platform for Next.js applications. Here's how the deployment was set up:
+
+### Deployment Process
+1. Install Vercel CLI globally:
+   ```bash
+   npm install -g vercel
+   ```
+2. Deploy using Vercel CLI:
+   ```bash
+   vercel
+   ```
+3. Follow the authentication process through GitHub or your preferred provider
+4. The project will be automatically built and deployed
+
+### Environment Variables
+The following environment variables need to be configured in your Vercel project settings:
+
+```env
+NEXT_PUBLIC_FIREBASE_API_KEY
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+NEXT_PUBLIC_FIREBASE_PROJECT_ID
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+NEXT_PUBLIC_FIREBASE_APP_ID
+NEXT_PUBLIC_HUGGINGFACE_API_KEY
+```
+
+To set up environment variables:
+1. Go to your project settings in the Vercel dashboard
+2. Navigate to the "Environment Variables" section
+3. Add each variable from your local `.env.local` file
+4. Deploy or redeploy your application
+
+### Automatic Deployments
+- The project is configured for automatic deployments on every push to the main branch
+- Preview deployments are created for pull requests
+- Production deployments are triggered on merges to main
+
+### Domain Configuration
+After deployment, your application will be available at:
+- Production: `https://[project-name].vercel.app`
+- Preview: `https://[branch-name].[project-name].vercel.app`
+
+You can configure a custom domain through the Vercel dashboard if desired.
