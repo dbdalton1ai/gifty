@@ -25,6 +25,12 @@ jest.mock('firebase/firestore', () => ({
   where: jest.fn(),
   deleteDoc: jest.fn(),
   doc: jest.fn(),
+  updateDoc: jest.fn(),
+  setDoc: jest.fn(),
+  Timestamp: {
+    now: jest.fn(() => ({ seconds: 1234567890, nanoseconds: 0 })),
+    fromDate: jest.fn(date => ({ seconds: Math.floor(date.getTime() / 1000), nanoseconds: 0 }))
+  }
 }));
 
 // Mock next/navigation
@@ -38,5 +44,10 @@ jest.mock('next/navigation', () => ({
 }));
 
 // Add missing TextEncoder/TextDecoder for JSDOM
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder;
+Object.defineProperty(global, 'TextEncoder', {
+  value: TextEncoder
+});
+
+Object.defineProperty(global, 'TextDecoder', {
+  value: TextDecoder
+});

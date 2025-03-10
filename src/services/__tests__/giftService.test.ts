@@ -1,35 +1,33 @@
-import { collection, addDoc, getDocs, deleteDoc, doc, query, where } from 'firebase/firestore';
+import { collection, addDoc, getDocs, deleteDoc, doc, query, where, Timestamp } from 'firebase/firestore';
 import { getFirestore } from 'firebase/firestore';
 import { addGiftIdea, getGiftIdeas, deleteGiftIdea } from '../giftService';
-import { Gift } from '@/types/gift';
+import { GiftIdea } from '@/types/gift';
 
-jest.mock('firebase/firestore', () => ({
-  collection: jest.fn(),
-  addDoc: jest.fn(),
-  getDocs: jest.fn(),
-  deleteDoc: jest.fn(),
-  doc: jest.fn(),
-  query: jest.fn(),
-  where: jest.fn(),
-  getFirestore: jest.fn(),
-}));
+// Mock Firestore
+jest.mock('firebase/firestore');
 
 describe('giftService', () => {
-  const mockGift: Gift = {
+  const mockTimestamp = { seconds: 1234567890, nanoseconds: 0 };
+  const mockGift: Omit<GiftIdea, 'id'> = {
     title: 'Test Gift',
     description: 'Test Description',
     priceEstimate: 10.99,
     url: 'https://example.com',
     recipientId: 'recipient123',
+    isPurchased: false,
+    isArchived: false,
+    createdAt: mockTimestamp as Timestamp,
+    updatedAt: mockTimestamp as Timestamp
   };
 
-  const mockGiftWithId: Gift & { id: string } = {
+  const mockGiftWithId: GiftIdea = {
     id: 'gift123',
     ...mockGift,
   };
 
   beforeEach(() => {
     jest.clearAllMocks();
+    (getFirestore as jest.Mock).mockReturnValue({});
   });
 
   describe('addGiftIdea', () => {
@@ -40,7 +38,11 @@ describe('giftService', () => {
       await addGiftIdea(mockGift);
 
       expect(collection).toHaveBeenCalledWith(expect.anything(), 'gifts');
-      expect(addDoc).toHaveBeenCalledWith('gifts-collection', mockGift);
+      expect(addDoc).toHaveBeenCalledWith('gifts-collection', {
+        ...mockGift,
+        createdAt: expect.any(Object),
+        updatedAt: expect.any(Object)
+      });
     });
 
     it('throws error when adding gift fails', async () => {
