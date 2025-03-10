@@ -2,7 +2,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
 import { AuthContext } from '@/context/AuthContext';
 import NavBar from '../NavBar';
-import { signOut } from 'firebase/auth';
 import { User } from 'firebase/auth';
 
 jest.mock('next/navigation', () => ({

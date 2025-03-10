@@ -5,7 +5,8 @@ import {
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
   onAuthStateChanged,
-  User
+  User,
+  AuthError
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase/config';
 
@@ -44,8 +45,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const idToken = await userCredential.user.getIdToken();
       // Set the session cookie
       document.cookie = `session=${idToken}; path=/`;
-    } catch (error: any) {
-      const errorMessage = error.message || 'Failed to sign in';
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to sign in';
       throw new Error(errorMessage);
     }
   };

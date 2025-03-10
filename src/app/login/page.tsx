@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/Button';
 import LoginForm from '@/components/forms/LoginForm';
 
 export default function LoginPage() {

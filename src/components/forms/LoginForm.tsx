@@ -20,7 +20,7 @@ export default function LoginForm() {
       console.log('Sign in successful, redirecting...');
       router.push('/gifts');
       router.refresh(); // Add refresh to ensure navigation works properly
-    } catch (err: any) {
+    } catch (err: Error | unknown) {
       console.error('Sign in error:', err);
       setError('Invalid email or password');
     }

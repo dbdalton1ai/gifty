@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs, query, where, deleteDoc, doc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where, deleteDoc, doc, updateDoc, serverTimestamp, Query, CollectionReference } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { GiftIdea } from '@/types/gift';
 
@@ -23,9 +23,9 @@ export const addGiftIdea = async (gift: Omit<GiftIdea, 'id' | 'createdAt' | 'upd
 export const getGiftIdeas = async (recipientId?: string) => {
   try {
     const collectionRef = collection(db, GIFTS_COLLECTION);
-    let q = collectionRef;
+    let q: Query | CollectionReference = collectionRef;
     if (recipientId) {
-      q = query(collectionRef, where('recipientId', '==', recipientId)) as any;
+      q = query(collectionRef, where('recipientId', '==', recipientId));
     }
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({

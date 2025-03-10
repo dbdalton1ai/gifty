@@ -1,7 +1,7 @@
 import { render, screen, act } from '@testing-library/react';
 import { useContext } from 'react';
 import { AuthContext, AuthProvider } from '../AuthContext';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 
 jest.mock('firebase/auth', () => ({
   getAuth: jest.fn(),
@@ -76,8 +76,35 @@ describe('AuthContext', () => {
   });
 
   it('handles auth state change', async () => {
-    const mockUser = { email: 'test@example.com' };
-    let authCallback: (user: any) => void;
+    const mockUser: User = {
+      email: 'test@example.com',
+      emailVerified: false,
+      isAnonymous: false,
+      metadata: {},
+      providerData: [],
+      refreshToken: '',
+      tenantId: null,
+      delete: () => Promise.resolve(),
+      getIdToken: () => Promise.resolve(''),
+      getIdTokenResult: () => Promise.resolve({
+        token: '',
+        signInProvider: null,
+        claims: {},
+        authTime: '',
+        issuedAtTime: '',
+        expirationTime: '',
+        signInSecondFactor: null,
+      }),
+      reload: () => Promise.resolve(),
+      toJSON: () => ({}),
+      displayName: null,
+      phoneNumber: null,
+      photoURL: null,
+      providerId: 'firebase',
+      uid: 'test-uid'
+    };
+
+    let authCallback: (user: User | null) => void;
     
     (getAuth as jest.Mock).mockReturnValue({});
     (onAuthStateChanged as jest.Mock).mockImplementation((auth, callback) => {

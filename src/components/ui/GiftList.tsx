@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { GiftIdea } from '@/types/gift';
-import { getGiftIdeas, deleteGiftIdea, updateGiftIdea } from '@/services/giftService';
+import { getGiftIdeas, updateGiftIdea } from '@/services/giftService';
 import Button from './Button';
 import { Timestamp } from 'firebase/firestore';
 
@@ -13,11 +13,7 @@ interface GiftListProps {
 export default function GiftList({ recipientId, onDelete, showArchived = false }: GiftListProps) {
   const [gifts, setGifts] = useState<GiftIdea[]>([]);
 
-  useEffect(() => {
-    loadGifts();
-  }, [recipientId, showArchived]);
-
-  const loadGifts = async () => {
+  const loadGifts = useCallback(async () => {
     try {
       const giftIdeas = await getGiftIdeas(recipientId);
       const filteredGifts = giftIdeas
@@ -27,7 +23,11 @@ export default function GiftList({ recipientId, onDelete, showArchived = false }
     } catch (error) {
       console.error('Error loading gifts:', error);
     }
-  };
+  }, [recipientId, showArchived]);
+
+  useEffect(() => {
+    loadGifts();
+  }, [loadGifts]);
 
   const handleArchive = async (id: string) => {
     try {
