@@ -1,5 +1,5 @@
-import { useState, FormEvent, KeyboardEvent } from 'react';
-import Button from '@/components/ui/Button';
+import { FC, FormEvent, useState } from 'react';
+import Button from '../ui/Button';
 import { addGiftIdea } from '@/services/giftService';
 import { parseGiftText } from '@/services/textParsingService';
 
@@ -8,24 +8,25 @@ interface GiftFormProps {
   onSuccess?: () => void;
 }
 
-export default function GiftForm({ recipientId, onSuccess }: GiftFormProps) {
+const GiftForm: FC<GiftFormProps> = ({ recipientId, onSuccess }) => {
   const [giftText, setGiftText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e?: FormEvent) => {
     e?.preventDefault();
     if (!giftText.trim() || isSubmitting) return;
-
     setIsSubmitting(true);
+    
     try {
-      const { title, description } = await parseGiftText(giftText);
-      
+      const { title, description, priceEstimate, url } = await parseGiftText(giftText);
       await addGiftIdea({
         title,
         description,
+        priceEstimate: priceEstimate ? parseFloat(priceEstimate) : undefined,
+        url,
         recipientId,
+        recipientName: ''
       });
-      
       setGiftText('');
       onSuccess?.();
     } catch (error) {
@@ -35,7 +36,7 @@ export default function GiftForm({ recipientId, onSuccess }: GiftFormProps) {
     }
   };
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       handleSubmit();
@@ -60,10 +61,11 @@ export default function GiftForm({ recipientId, onSuccess }: GiftFormProps) {
           required
         />
       </div>
-
       <Button type="submit" className="w-full" disabled={isSubmitting}>
         {isSubmitting ? 'Adding...' : 'Add Gift Idea'}
       </Button>
     </form>
   );
-}
+};
+
+export default GiftForm;

@@ -1,13 +1,22 @@
-import { collection, addDoc, getDocs, query, where, deleteDoc, doc, updateDoc, serverTimestamp, Query, CollectionReference } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where, deleteDoc, doc, updateDoc, serverTimestamp, getDoc, Query, CollectionReference } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { GiftIdea } from '@/types/gift';
 
 const GIFTS_COLLECTION = 'gifts';
+const RECIPIENTS_COLLECTION = 'recipients';
 
-export const addGiftIdea = async (gift: Omit<GiftIdea, 'id' | 'createdAt' | 'updatedAt'>) => {
+export const addGiftIdea = async (gift: Omit<GiftIdea, 'id' | 'createdAt' | 'updatedAt' | 'isPurchased' | 'isArchived'>) => {
   try {
+    // Get recipient details
+    const recipientDoc = await getDoc(doc(db, RECIPIENTS_COLLECTION, gift.recipientId));
+    if (!recipientDoc.exists()) {
+      throw new Error('Recipient not found');
+    }
+
+    const recipientData = recipientDoc.data();
     const docRef = await addDoc(collection(db, GIFTS_COLLECTION), {
       ...gift,
+      recipientName: recipientData.name,
       isPurchased: false,
       isArchived: false,
       createdAt: serverTimestamp(),
@@ -38,11 +47,11 @@ export const getGiftIdeas = async (recipientId?: string) => {
   }
 };
 
-export const updateGiftIdea = async (id: string, gift: Partial<Omit<GiftIdea, 'id' | 'createdAt' | 'updatedAt'>>) => {
+export const updateGiftIdea = async (id: string, updates: Partial<Omit<GiftIdea, 'id' | 'createdAt' | 'updatedAt'>>) => {
   try {
     const docRef = doc(db, GIFTS_COLLECTION, id);
     await updateDoc(docRef, {
-      ...gift,
+      ...updates,
       updatedAt: serverTimestamp(),
     });
   } catch (error) {

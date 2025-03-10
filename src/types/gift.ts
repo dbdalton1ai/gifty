@@ -7,10 +7,11 @@ export interface GiftIdea {
   priceEstimate?: number;
   url?: string;
   recipientId: string;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
-  isPurchased?: boolean;
-  isArchived?: boolean;
+  recipientName: string;
+  isPurchased: boolean;
+  isArchived: boolean;
+  createdAt: any; // Firestore Timestamp
+  updatedAt: any; // Firestore Timestamp
 }
 
 export interface Recipient {
