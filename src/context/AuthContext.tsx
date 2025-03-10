@@ -5,8 +5,7 @@ import {
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
   onAuthStateChanged,
-  User,
-  AuthError
+  User
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase/config';
 
